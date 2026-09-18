@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personal Study Nook</title>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #2b2d42;
+      --card-bg: #3d405b;
+      --accent: #e07a5f;
+      --text: #f4f1de;
+      --highlight: #f2cc8f;
+      --border: #1d1e2c;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Quicksand', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px;
+      gap: 20px;
+    }
+
+    h1, h2 { font-family: 'VT323', monospace; color: var(--highlight); }
+    h1 { font-size: 2.5rem; text-shadow: 2px 2px var(--border); }
+
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+      width: 100%;
+      max-width: 1050px;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border: 3px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 4px 4px 0px var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Character Maker */
+    .avatar-display {
+      width: 160px;
+      height: 160px;
+      background: var(--bg);
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .controls-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .control-item {
+      display: flex;
+      flex-direction: column;
+      font-size: 0.85rem;
+      gap: 4px;
+    }
+
+    select, input[type="color"], input[type="text"] {
+      background: var(--bg);
+      color: var(--text);
+      border: 2px solid var(--border);
+      border-radius: 6px;
+      padding: 6px;
+      font-family: inherit;
+    }
+
+    /* Timer */
+    .timer-readout {
+      font-family: 'VT323', monospace;
+      font-size: 4rem;
+      color: var(--highlight);
+    }
+
+    /* Buttons */
+    .btn-row { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+
+    button {
+      background: var(--accent);
+      color: var(--text);
+      border: 2px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 16px;
+      font-family: 'VT323', monospace;
+      font-size: 1.2rem;
+      cursor: pointer;
+      box-shadow: 2px 2px 0px var(--border);
+    }
+
+    button:hover { filter: brightness(1.1); }
+    button:active { transform: translate(2px, 2px); box-shadow: none; }
+
+    /* Music Player Frame */
+    .media-container { width: 100%; height: 200px; border-radius: 8px; overflow: hidden; }
+    iframe { width: 100%; height: 100%; border: none; }
+  </style>
+</head>
+<body>
+
+  <h1>✨ Retro Study Nook ✨</h1>
+
+  <div class="app-grid">
+
+    <!-- CHARACTER MAKER -->
+    <div class="card">
+      <h2>Avatar Creator</h2>
+      <div class="avatar-display">
+        <svg id="avatar-svg" width="120" height="120" viewBox="0 0 100 100">
+          <!-- Body -->
+          <rect id="svg-shirt" x="30" y="65" width="40" height="35" rx="5" fill="#e07a5f" />
+          <!-- Head -->
+          <rect id="svg-skin" x="35" y="25" width="30" height="35" rx="4" fill="#fadcac" />
+          <!-- Eyes -->
+          <circle id="eye-left" cx="43" cy="40" r="3" fill="#1d1e2c" />
+          <circle id="eye-right" cx="57" cy="40" r="3" fill="#1d1e2c" />
+          <!-- Hair Base -->
+          <path id="svg-hair" d="M 32 25 Q 50 10 68 25 Z" fill="#3d2314" />
+          <!-- Glasses -->
+          <g id="svg-glasses" opacity="0">
+            <rect x="39" y="36" width="9" height="8" fill="none" stroke="#f2cc8f" stroke-width="2"/>
+            <rect x="52" y="36" width="9" height="8" fill="none" stroke="#f2cc8f" stroke-width="2"/>
+            <line x1="48" y1="40" x2="52" y2="40" stroke="#f2cc8f" stroke-width="2"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="controls-grid">
+        <div class="control-item">
+          <label>Shirt Color</label>
+          <input type="color" id="col-shirt" value="#e07a5f" onchange="updateAvatar()">
+        </div>
+        <div class="control-item">
+          <label>Hair Color</label>
+          <input type="color" id="col-hair" value="#3d2314" onchange="updateAvatar()">
+        </div>
+        <div class="control-item">
+          <label>Hair Style</label>
+          <select id="hair-style" onchange="updateAvatar()">
+            <option value="short">Short Crop</option>
+            <option value="bun">Top Bun</option>
+            <option value="long">Long Flow</option>
+          </select>
+        </div>
+        <div class="control-item">
+          <label>Glasses</label>
+          <select id="acc-glasses" onchange="updateAvatar()">
+            <option value="none">None</option>
+            <option value="frames">Classic Frames</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- POMODORO TIMER -->
+    <div class="card">
+      <h2>Focus Timer</h2>
+      <div class="timer-readout" id="timer-display">25:00</div>
+      <div class="btn-row">
+        <button onclick="startTimer()">Start</button>
+        <button onclick="pauseTimer()">Pause</button>
+        <button onclick="resetTimer(25)">25m</button>
+        <button onclick="resetTimer(5)">5m Break</button>
+      </div>
+    </div>
+
+    <!-- MUSIC DOCK -->
+    <div class="card" style="grid-column: 1 / -1;">
+      <h2>Music Dock</h2>
+      <div style="display: flex; gap: 8px; width: 100%; max-width: 500px; margin-bottom: 8px;">
+        <input type="text" id="media-input" placeholder="Paste YouTube Video ID or Spotify Embed Link" style="flex: 1;">
+        <button onclick="loadMedia()">Load</button>
+      </div>
+      <div class="media-container">
+        <iframe id="media-frame" src="https://www.youtube-nocookie.com/embed/jfKfPfyJRdk" allow="autoplay; encrypted-media"></iframe>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    /* Avatar Logic */
+    function updateAvatar() {
+      document.getElementById('svg-shirt').setAttribute('fill', document.getElementById('col-shirt').value);
+      const hairColor = document.getElementById('col-hair').value;
+      const hairEl = document.getElementById('svg-hair');
+      hairEl.setAttribute('fill', hairColor);
+
+      const style = document.getElementById('hair-style').value;
+      if (style === 'short') hairEl.setAttribute('d', 'M 32 25 Q 50 10 68 25 Z');
+      if (style === 'bun') hairEl.setAttribute('d', 'M 32 25 Q 50 10 68 25 Z M 44 8 A 6 6 0 1 1 56 8 Z');
+      if (style === 'long') hairEl.setAttribute('d', 'M 32 25 Q 50 10 68 25 Q 30 50 30 65 M 68 25 Q 70 50 70 65');
+
+      const glasses = document.getElementById('acc-glasses').value;
+      document.getElementById('svg-glasses').setAttribute('opacity', glasses === 'frames' ? '1' : '0');
+    }
+
+    /* Timer Logic */
+    let duration = 1500, timerId = null;
+    function updateTimerDisplay() {
+      const min = Math.floor(duration / 60).toString().padStart(2, '0');
+      const sec = (duration % 60).toString().padStart(2, '0');
+      document.getElementById('timer-display').innerText = `${min}:${sec}`;
+    }
+    function startTimer() {
+      if (!timerId) {
+        timerId = setInterval(() => {
+          if (duration > 0) { duration--; updateTimerDisplay(); }
+          else { clearInterval(timerId); alert("Time is up!"); }
+        }, 1000);
+      }
+    }
+    function pauseTimer() { clearInterval(timerId); timerId = null; }
+    function resetTimer(mins) { pauseTimer(); duration = mins * 60; updateTimerDisplay(); }
+
+    /* Media Logic */
+    function loadMedia() {
+      const val = document.getElementById('media-input').value.trim();
+      const frame = document.getElementById('media-frame');
+      if (val.includes('spotify.com')) {
+        frame.src = val.replace('open.spotify.com/', 'open.spotify.com/embed/');
+      } else if (val) {
+        // Assume YouTube ID or URL
+        const ytId = val.includes('v=') ? val.split('v=')[1].split('&')[0] : val;
+        frame.src = `https://www.youtube-nocookie.com/embed/${ytId}`;
+      }
+    }
+  </script>
+</body>
+</html>
