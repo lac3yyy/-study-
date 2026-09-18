@@ -2,20 +2,32 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <!-- Forces all relative links, CSS, and images to pull from lofi.town -->
-  <base href="https://lofi.town/">
-  <script>
-    // Fetches the live HTML directly to bypass iframe embedding blocks
-    fetch('https://lofi.town/')
-      .then(response => response.text())
-      .then(html => {
-        document.open();
-        document.write(html);
-        document.close();
-      })
-      .catch(err => console.error('Asset block:', err));
-  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Study Workspace</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #000;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+  </style>
 </head>
 <body>
+  <iframe 
+    src="https://lofi.town/app" 
+    allow="autoplay; encrypted-media; microphone; camera" 
+    allowfullscreen>
+  </iframe>
 </body>
 </html>
